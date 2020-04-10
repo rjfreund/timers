@@ -14,11 +14,13 @@
         user-select: none;
     }
 </style>
+<div id="content"></div>
+<input id="input" type="text" style="display: none"/>
 <script async>
 (async function(){
     var response = await fetch('Artboard1.svg');
     var text = await response.text();
-    document.body.innerHTML = text;
+    document.getElementById("content").innerHTML = text;
     document.getElementById("Add_Timer_Button").onclick = function(){
         alert("hi");
     };
@@ -26,7 +28,7 @@
         alert("delete");
     };
     document.querySelector("#Timer3 text").addEventListener('touchstart', function(evt){
-        document.querySelector("#Timer3 text").focus();
+        document.querySelector("#input").focus();
     });
     document.querySelector("#Timer3 text").addEventListener('mousedown', function(evt){
         console.log(evt);
