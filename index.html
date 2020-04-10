@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-        <table>
-            <thead>
-                <tr>
-                    <th>end time</th><th>elapsed time</th><th><!-- start button --></th><th><!-- delte button --></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>end time</td><td>elapsed time</td><td><button>start</button></td><td><button>delete</button></td>
-                </tr>
-            </tbody>
-        </table>
-        <button id="addTimerButton">+ Add timer</button>
-    </body>
-    <script src="generated.js"></script>
-</html>
+<style>
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<script>
+fetch('Artboard1.svg')
+.then((response) => {
+    return response.text();
+}).then((data) => {    
+    document.body.innerHTML = data;
+    document.getElementById("Add_Timer_Button").onclick = function(){
+        alert("hi");
+    };
+    document.getElementById("Timer1DeleteBtn").onclick = function(){
+        alert("delete");
+    };
+});
+</script>
