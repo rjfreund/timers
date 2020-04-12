@@ -13,6 +13,10 @@
         -ms-user-select: none;
         user-select: none;
     }
+
+    #TimerText text{
+        font-style: italic;
+    }
 </style>
 <div id="content"></div>
 <input id="myText" type="text" style="visibility: hidden;"/>
@@ -22,12 +26,25 @@
     var text = await response.text();
     document.getElementById("content").innerHTML = text;
 
+    var interval = setInterval(function(){
+        var timerText = document.querySelector("#TimerText text").textContent;
+        document.querySelector("#TimerText text").textContent = (timerText[2]==":") ? timerText.replace(":", " ") : timerText.replace(" ", ":");
+    }, 1000);
 
-    document.getElementById("SetPlus").onclick = function(){
-        document.querySelector("#TimerText text").textContent = "yo";
+    document.getElementById("SetPlus").onclick = function(event){
+        var text = document.querySelector("#TimerText text").textContent;        
+        var minutes = parseInt(text[text.length-2] + text[text.length-1]);
+        minutes++;
+        var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
+        document.querySelector("#TimerText text").textContent = text.substring(0,3) + minutesString;
     };
-    document.getElementById("SetMinus").onclick = function(){
-        alert("delete");
+    document.getElementById("SetMinus").onclick = function(){        
+        var text = document.querySelector("#TimerText text").textContent;        
+        var minutes = parseInt(text[text.length-2] + text[text.length-1]);
+        if (minutes <= 0) return;
+        minutes--;
+        var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
+        document.querySelector("#TimerText text").textContent = text.substring(0,3) + minutesString;
     };
     document.querySelector("#Timer3 text").addEventListener('touchstart', function(evt){
         document.getElementById("myText").focus();
