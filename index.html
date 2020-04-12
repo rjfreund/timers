@@ -21,10 +21,12 @@
     var response = await fetch('oven-ui.svg');
     var text = await response.text();
     document.getElementById("content").innerHTML = text;
-    document.getElementById("Add_Timer_Button").onclick = function(){
-        alert("hi");
+
+
+    document.getElementById("SetPlus").onclick = function(){
+        document.querySelector("#TimerText text").textContent = "yo";
     };
-    document.getElementById("Timer1DeleteBtn").onclick = function(){
+    document.getElementById("SetMinus").onclick = function(){
         alert("delete");
     };
     document.querySelector("#Timer3 text").addEventListener('touchstart', function(evt){
