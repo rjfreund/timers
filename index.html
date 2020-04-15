@@ -4,7 +4,7 @@
     }
     svg {
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
     }
 
     svg text{
@@ -16,6 +16,22 @@
 
     #TimerText text{
         font-style: italic;
+        font-family: "Digital-7 Mono";
+    }
+
+    @font-face {
+        font-family: "Digital-7 Mono";
+        src: url("/fonts/digital_7/digital-7 (mono italic).ttf")
+    }
+
+    @font-face {
+        font-family: "High Tower Text";
+        src: url("/fonts/high-tower-text/HTOWERT.ttf")
+    }
+
+    @font-face {
+        font-family: "High Tower Text";
+        src: url("/fonts/high-tower-text/HTOWERT.ttf")
     }
 </style>
 <div id="content"></div>
@@ -31,41 +47,83 @@
         document.querySelector("#TimerText text").textContent = (timerText[2]==":") ? timerText.replace(":", " ") : timerText.replace(" ", ":");
     }, 1000);
 
-    document.getElementById("SetPlus").onclick = function(event){
-        var text = document.querySelector("#TimerText text").textContent;        
+    document.getElementById("SetPlus").addEventListener('click', function(event){
+        
+    });
+    
+    var addByTenInterval = null;
+    document.getElementById("SetPlus").addEventListener('mousedown', function(event){
+        var text = document.querySelector("#TimerText text").textContent; 
+        var hours = parseInt(text[0] + text[1]);       
         var minutes = parseInt(text[text.length-2] + text[text.length-1]);
         minutes++;
+        if (minutes >= 60){
+            hours++;
+            minutes = minutes - 60;
+        }
+        var hoursString = (hours >= 10) ? hours.toString() : "0"+hours.toString();
         var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
-        document.querySelector("#TimerText text").textContent = text.substring(0,3) + minutesString;
-    };
-    document.getElementById("SetMinus").onclick = function(){        
-        var text = document.querySelector("#TimerText text").textContent;        
-        var minutes = parseInt(text[text.length-2] + text[text.length-1]);
-        if (minutes <= 0) return;
-        minutes--;
-        var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
-        document.querySelector("#TimerText text").textContent = text.substring(0,3) + minutesString;
-    };
-    document.querySelector("#Timer3 text").addEventListener('touchstart', function(evt){
-        document.getElementById("myText").focus();
+        document.querySelector("#TimerText text").textContent = hoursString + text.charAt(2) + minutesString;
+
+        
+        addByTenInterval = setInterval(function(event){
+            var text = document.querySelector("#TimerText text").textContent;        
+            var minutes = parseInt(text[text.length-2] + text[text.length-1]);
+            minutes = Math.ceil((minutes+1)/10) * 10;
+            if (minutes >= 60){
+                hours++;
+                minutes = minutes - 60;
+            }
+            var hoursString = (hours >= 10) ? hours.toString() : "0"+hours.toString();
+            var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
+            document.querySelector("#TimerText text").textContent = hoursString + text.charAt(2) + minutesString;            
+        }, 500);
+        
     });
-    document.querySelector("#Timer3 text").addEventListener('mousedown', function(evt){        
-        //document.body.addEventListener('mousemove', handleMouseMove);
-        document.getElementById("myText").focus();
-    });
-    document.body.addEventListener('mouseup', function(evt){
-        /*
-        console.log(evt);
-        document.body.removeEventListener("mousemove", handleMouseMove);
-        */
-        document.getElementById("myText").focus();
+    document.getElementById("SetPlus").addEventListener('mouseup', function(event){
+        clearInterval(addByTenInterval);
     });
 
-    function handleMouseMove(evt){
-        console.log(evt);
-    }
-    window.onload = function() {
-        document.getElementById("myText").focus();
-    };
+    var subtractByTenInterval = null;
+    document.getElementById("SetMinus").addEventListener('mousedown', function(event){
+        var text = document.querySelector("#TimerText text").textContent;
+        var hours = parseInt(text[0] + text[1]);   
+        var minutes = parseInt(text[text.length-2] + text[text.length-1]);
+        if (hours <= 0 && minutes <= 0) return;
+        if (minutes == 0){
+            hours--;
+            minutes=59;
+        } else {
+            minutes--;
+        }
+        var hoursString = (hours >= 10) ? hours.toString() : "0"+hours.toString();
+        var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
+        document.querySelector("#TimerText text").textContent = hoursString + text.charAt(2) + minutesString;
+
+        subtractByTenInterval = setInterval(function(event){
+            var text = document.querySelector("#TimerText text").textContent;
+            var hours = parseInt(text[0] + text[1]);   
+            var minutes = parseInt(text[text.length-2] + text[text.length-1]);
+            if (hours <= 0 && minutes <= 0) return;
+            if (minutes == 0){
+                hours--;                
+                minutes=50;
+            } else {
+                minutes = Math.floor((minutes-1)/10) * 10;
+            }
+            var hoursString = (hours >= 10) ? hours.toString() : "0"+hours.toString();
+            var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
+            document.querySelector("#TimerText text").textContent = hoursString + text.charAt(2) + minutesString;
+        }, 500);
+    });
+    document.getElementById("SetMinus").addEventListener('mouseup', function(event){
+        clearInterval(subtractByTenInterval);
+        
+    });
+
+    document.querySelector('svg').addEventListener('mouseup', function(evt){
+        clearInterval(addByTenInterval);
+        clearInterval(subtractByTenInterval);
+    });
 })();
 </script>
