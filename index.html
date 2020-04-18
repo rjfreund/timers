@@ -33,7 +33,7 @@
 <div id="content"></div>
 <input id="myText" type="text" style="visibility: hidden;"/>
 <script async>
-(async function(){
+(async function(){    
     var response = await fetch('oven-ui.svg');
     var text = await response.text();
     document.getElementById("content").innerHTML = text;
@@ -42,18 +42,14 @@
         var timerText = document.querySelector("#TimerText text").textContent;
         document.querySelector("#TimerText text").textContent = (timerText[2]==":") ? timerText.replace(":", " ") : timerText.replace(" ", ":");
     }, 1000);
-
-    document.getElementById("SetPlus").addEventListener('click', function(event){
-        
-    });
     
     var addByTenInterval = null;
     document.getElementById("SetPlus").addEventListener('mousedown', function(event){
-        handleSetPlus(event);        
+        if ('ontouchstart' in document.documentElement) return;
+        handleSetPlus(event);
     });
-    document.getElementById("SetPlus").addEventListener('touchstart', function(event){
-        event.preventDefault();
-        handleSetPlus(event);        
+    document.getElementById("SetPlus").addEventListener('touchstart', function(event){        
+        handleSetPlus(event);
     });
 
     function handleSetPlus(event){
@@ -85,6 +81,7 @@
     }
 
     document.getElementById("SetPlus").addEventListener('mouseup', function(event){
+        if ('ontouchstart' in document.documentElement) return;
         clearInterval(addByTenInterval);
     });
     document.getElementById("SetPlus").addEventListener('touchend', function(event){
@@ -93,6 +90,14 @@
 
     var subtractByTenInterval = null;
     document.getElementById("SetMinus").addEventListener('mousedown', function(event){
+        if ('ontouchstart' in document.documentElement) return;
+        handleSetMinus(event)        
+    });
+    document.getElementById("SetMinus").addEventListener('touchstart', function(event){        
+        handleSetMinus(event);
+    });
+
+    function handleSetMinus(event){
         var text = document.querySelector("#TimerText text").textContent;
         var hours = parseInt(text[0] + text[1]);   
         var minutes = parseInt(text[text.length-2] + text[text.length-1]);
@@ -122,13 +127,21 @@
             var minutesString = (minutes >= 10) ? minutes.toString() : "0"+minutes.toString();
             document.querySelector("#TimerText text").textContent = hoursString + text.charAt(2) + minutesString;
         }, 500);
-    });
+    }
+
     document.getElementById("SetMinus").addEventListener('mouseup', function(event){
-        clearInterval(subtractByTenInterval);
-        
+        if ('ontouchstart' in document.documentElement) return;
+        clearInterval(subtractByTenInterval);        
+    });
+    document.getElementById("SetMinus").addEventListener('touchend', function(event){
+        clearInterval(subtractByTenInterval);        
     });
 
     document.querySelector('svg').addEventListener('mouseup', function(evt){
+        clearInterval(addByTenInterval);
+        clearInterval(subtractByTenInterval);
+    });
+    document.querySelector('svg').addEventListener('touchend', function(evt){
         clearInterval(addByTenInterval);
         clearInterval(subtractByTenInterval);
     });
