@@ -33,7 +33,7 @@
 <div id="content"></div>
 <input id="myText" type="text" style="visibility: hidden;"/>
 <script async>
-(async function(){    
+(async function(){
     var response = await fetch('oven-ui.svg');
     var text = await response.text();
     document.getElementById("content").innerHTML = text;
